@@ -8,8 +8,18 @@ export default class FooterApp extends React.Component{
     }
 
     render(){
+
+        const style = {
+            Footer:{
+                position: "absolute",
+                bottom: "0",
+                width: "100%"
+            }
+        }
+
         return (
             <Footer
+            style={style.Footer}
             className="blue"
             copyrights="2020 - Todos os direitos reservados">
 
