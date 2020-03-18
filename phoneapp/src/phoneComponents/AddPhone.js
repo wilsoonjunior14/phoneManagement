@@ -6,6 +6,7 @@ import Select from "../components/Select";
 import DateField from "../components/DateField";
 import PriceField from "../components/PriceField";
 import axios from "axios";
+import {Redirect} from "react-router-dom";
 
 export default class AddPhone extends React.Component{
 
@@ -13,7 +14,8 @@ export default class AddPhone extends React.Component{
         super(props);
 
         this.state = {
-            colors: ['Black', 'White', 'Gold', 'Pink'],
+            redirect: false,
+            colors: ['BLACK', 'WHITE', 'GOLD', 'PINK'],
             product: {}
         };
 
@@ -29,13 +31,12 @@ export default class AddPhone extends React.Component{
     }
 
     submitProduct(){
-        console.log(this.state);
 
         let validation = this.validateProduct();
         if (validation.status){
 
             let oldState = this.state;
-            oldState.product.code = "dsgdsg";
+            oldState.product.code = "#"+parseInt(10000+(Math.random()*1000));
             this.setState(oldState);
 
             const defaultOptions = {
@@ -46,7 +47,13 @@ export default class AddPhone extends React.Component{
 
             axios.post("https://phones--melhorcom.repl.co/phone", this.state.product, defaultOptions)
             .then(res => {
-                console.log(res);
+                let oldState     = this.state;
+                oldState.product = {};
+                oldState.redirect= true;
+                this.setState({oldState});
+
+                let data = res.data;
+                toast.info(data.business);
             });
 
         }else{
@@ -91,6 +98,10 @@ export default class AddPhone extends React.Component{
         let dateSplit = this.state.product.date.split("/");
         let day       = parseInt(dateSplit[0]);
         let month     = parseInt(dateSplit[1]);
+        let year      = parseInt(dateSplit[2]);
+
+        let dateTimestamp = (new Date(""+year+"-"+month+"-"+day+"")).getTime();
+        let cutTimestamp  = (new Date("2018-12-25")).getTime();
         
         if (day <= 0 || day > 31){
             return {message: "Dia da data de início das vendas está inválido!", status: false};
@@ -100,6 +111,11 @@ export default class AddPhone extends React.Component{
             return {message: "Mês da data de início das vendas está inválido!", status: false};
         }
 
+        if (dateTimestamp <= cutTimestamp){
+            return {message: "Data de início das vendas deve ser superior a data de 25/12/2018", status: false};
+        }
+        
+
         if (this.state.product.endDate == undefined){
             return {message: "Data de fim das vendas não informado!", status: false};
         }
@@ -107,6 +123,8 @@ export default class AddPhone extends React.Component{
         let endDateSplit = this.state.product.endDate.split("/");
         day       = parseInt(endDateSplit[0]);
         month     = parseInt(endDateSplit[1]);
+        year      = parseInt(endDateSplit[2]);
+        let endDateTimestamp = (new Date(""+year+"-"+month+"-"+day+"")).getTime();
         
         if (day <= 0 || day > 31){
             return {message: "Dia da data de fim das vendas está inválido!", status: false};
@@ -116,14 +134,21 @@ export default class AddPhone extends React.Component{
             return {message: "Mês da data de fim das vendas está inválido!", status: false};
         }
 
+        if (endDateTimestamp <= dateTimestamp){
+            return {message: "Data de início das vendas não pode ser superior a data fim das vendas!", status: false};
+        }
+
         return {message: "", status: true};
 
     }
 
     render(){
 
-        const style = {
+        if (this.state.redirect){
+            return (<Redirect to="/"></Redirect>);
+        }
 
+        const style = {
             container:{
                 width: "40%"
             },
