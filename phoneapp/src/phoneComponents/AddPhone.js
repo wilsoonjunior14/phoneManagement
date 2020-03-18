@@ -1,8 +1,10 @@
 import React, {Component} from "react";
 import {Container, Row, Col, Button, TextInput} from "react-materialize";
-
+import {toast} from "react-toastify";
 import Input from "../components/Input";
 import Select from "../components/Select";
+import DateField from "../components/DateField";
+import PriceField from "../components/PriceField";
 
 export default class AddPhone extends React.Component{
 
@@ -14,8 +16,9 @@ export default class AddPhone extends React.Component{
             product: {}
         };
 
-        this.updateValues  = this.updateValues.bind(this);
-        this.submitProduct = this.submitProduct.bind(this);
+        this.updateValues    = this.updateValues.bind(this);
+        this.submitProduct   = this.submitProduct.bind(this);
+        this.validateProduct = this.validateProduct.bind(this);
     }
 
     updateValues(evt){
@@ -26,6 +29,79 @@ export default class AddPhone extends React.Component{
 
     submitProduct(){
         console.log(this.state);
+
+        let validation = this.validateProduct();
+        if (validation.status){
+
+        }else{
+            toast.error(validation.message);
+        }
+    }
+
+    validateProduct(){
+
+        if (this.state.product.model == undefined){
+            return {message: "Modelo não informado!", status: false};
+        }
+
+        if ((this.state.product.model.trim()).length < 2 || (this.state.product.model.trim()).length > 255){
+            return {message: "Descrição do Modelo deve conter entre 2 e 255 caracteres!", status: false};
+        }
+
+        if (this.state.product.brand == undefined){
+            return {message: "Marca não informada!", status: false};
+        }
+
+        if ((this.state.product.brand.trim()).length < 2 || (this.state.product.brand.trim()).length > 255){
+            return {message: "Descrição da Marca deve conter entre 2 e 255 caracteres!", status: false};
+        }
+
+        if (this.state.product.color == undefined || this.state.product.color == ""){
+            return {message: "Cor não informada!", status: false};
+        }
+
+        if (this.state.product.price == undefined){
+            return {message: "Preço não informado!", status: false};
+        }
+
+        if (this.state.product.price <= 0){
+            return {message: "Preço com valor nulo! ", status: false};
+        }
+
+        if (this.state.product.date == undefined || this.state.product.date.length < 10){
+            return {message: "Data de início das vendas não informado ou inválida!", status: false};
+        }
+
+        let dateSplit = this.state.product.date.split("/");
+        let day       = parseInt(dateSplit[0]);
+        let month     = parseInt(dateSplit[1]);
+        
+        if (day <= 0 || day > 31){
+            return {message: "Dia da data de início das vendas está inválido!", status: false};
+        }
+
+        if (month <= 0 || month > 12){
+            return {message: "Mês da data de início das vendas está inválido!", status: false};
+        }
+
+        if (this.state.product.endDate == undefined){
+            return {message: "Data de fim das vendas não informado!", status: false};
+        }
+
+        let endDateSplit = this.state.product.endDate.split("/");
+        day       = parseInt(endDateSplit[0]);
+        month     = parseInt(endDateSplit[1]);
+        
+        if (day <= 0 || day > 31){
+            return {message: "Dia da data de fim das vendas está inválido!", status: false};
+        }
+
+        if (month <= 0 || month > 12){
+            return {message: "Mês da data de fim das vendas está inválido!", status: false};
+        }
+
+        return {message: "", status: true};
+
     }
 
     render(){
@@ -53,13 +129,13 @@ export default class AddPhone extends React.Component{
                                 <Select name="color" options={this.state.colors} value={this.state.product.color} onChange={this.updateValues}></Select>
                             </Col>
                             <Col s="12" l="6">
-                                <Input id="preco" name="price" label="Preço" type="text" value={this.state.product.price} onChange={this.updateValues}></Input>
+                                <PriceField id="preco" name="price" label="Preço" type="text" value={this.state.product.price} onChange={this.updateValues}></PriceField>
                             </Col>
                             <Col s="12" l="6">
-                                <Input id="inicio" name="date" label="Inicio das Vendas" type="text" value={this.state.product.date} onChange={this.updateValues}></Input>
+                                <DateField id="inicio" name="date" label="Inicio das Vendas" type="text" value={this.state.product.date} onChange={this.updateValues}></DateField>
                             </Col>
                             <Col s="12" l="6">
-                                <Input id="fim" name="endDate" label="Fim das Vendas" type="text" value={this.state.product.endDate} onChange={this.updateValues}></Input>
+                                <DateField id="fim" name="endDate" label="Fim das Vendas" type="text" value={this.state.product.endDate} onChange={this.updateValues}></DateField>
                             </Col>
                         </Row>
                         <Row>
