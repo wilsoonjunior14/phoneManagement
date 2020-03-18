@@ -1,10 +1,22 @@
 import React from "react";
 import InputMask from "react-input-mask";
 
+import createNumberMask from '../../node_modules/text-mask-addons/dist/createNumberMask';
+
 export default class PriceField extends React.Component{
 
     constructor(props){
         super(props);
+        this.toCurrency = this.toCurrency.bind(this);
+    }
+
+    toCurrency(number){
+        const formatter = new Intl.NumberFormat("sv-SE", {
+            style: "decimal",
+            currency: "SEK"
+          });
+      
+          return formatter.format(number);
     }
 
     render(){
@@ -29,7 +41,7 @@ export default class PriceField extends React.Component{
         return(
             <div>
                 <label style={style.label} for={this.props.id}>{this.props.label}</label>
-                <InputMask style={style.input} id={this.props.id} mask="99999" {...this.props} className="browser-default"></InputMask>
+                <InputMask onChange={this.toCurrency(this.props.value)} value={this.toCurrency(this.props.value)} style={style.input} id={this.props.id} {...this.props} className="browser-default"></InputMask>
             </div>
         );
     }

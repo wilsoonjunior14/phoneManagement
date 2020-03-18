@@ -5,6 +5,7 @@ import Input from "../components/Input";
 import Select from "../components/Select";
 import DateField from "../components/DateField";
 import PriceField from "../components/PriceField";
+import axios from "axios";
 
 export default class AddPhone extends React.Component{
 
@@ -12,7 +13,7 @@ export default class AddPhone extends React.Component{
         super(props);
 
         this.state = {
-            colors: ['BLACK', 'WHITE', 'GOLD', 'PINK'],
+            colors: ['Black', 'White', 'Gold', 'Pink'],
             product: {}
         };
 
@@ -32,6 +33,21 @@ export default class AddPhone extends React.Component{
 
         let validation = this.validateProduct();
         if (validation.status){
+
+            let oldState = this.state;
+            oldState.product.code = "dsgdsg";
+            this.setState(oldState);
+
+            const defaultOptions = {
+                headers: {
+                    cpf: "04925787454"
+                },
+            };
+
+            axios.post("https://phones--melhorcom.repl.co/phone", this.state.product, defaultOptions)
+            .then(res => {
+                console.log(res);
+            });
 
         }else{
             toast.error(validation.message);
@@ -129,7 +145,7 @@ export default class AddPhone extends React.Component{
                                 <Select name="color" options={this.state.colors} value={this.state.product.color} onChange={this.updateValues}></Select>
                             </Col>
                             <Col s="12" l="6">
-                                <PriceField id="preco" name="price" label="Preço" type="text" value={this.state.product.price} onChange={this.updateValues}></PriceField>
+                                <Input pattern="^-?[0-9]\d*\.?\d*$" id="preco" name="price" label="Preço" type="number" value={this.state.product.price} onChange={this.updateValues}></Input>
                             </Col>
                             <Col s="12" l="6">
                                 <DateField id="inicio" name="date" label="Inicio das Vendas" type="text" value={this.state.product.date} onChange={this.updateValues}></DateField>
