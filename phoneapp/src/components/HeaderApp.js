@@ -37,7 +37,7 @@ export default class HeaderApp extends React.Component{
                         preventScrolling: true
                     }}
                     >
-                        <NavItem href="/">List</NavItem>
+                        
                     </Navbar>
 
                     <Switch>

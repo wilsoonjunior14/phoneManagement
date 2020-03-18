@@ -17,7 +17,7 @@ export default class Input extends React.Component{
 
             input: {
                 borderRadius: "6px",
-                border: "1px solid lightgray",
+                border: "1px solid black",
                 display: "block",
                 padding: "5px",
                 width: "100%",
@@ -29,7 +29,7 @@ export default class Input extends React.Component{
         return (
         <div>
             <label style={style.label} for={this.props.id}>{this.props.label}</label>
-            <input style={style.input} id={this.props.id} type={this.props.type} className="browser-default" />
+            <input style={style.input} id={this.props.id} type={this.props.type} {...this.props} className="browser-default" />
         </div>);
     }
 

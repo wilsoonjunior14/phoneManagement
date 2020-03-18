@@ -15,17 +15,17 @@ export default class Select extends React.Component{
             },
             select: {
                 height: "35px",
-                border: "1px solid lightgray"
+                border: "1px solid black"
             }
         }
 
         return (
             <div>
                 <label style={style.label} for="select">Select</label>
-                <select style={style.select} className="browser-default" id="select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                <select style={style.select} className="browser-default" id="select" {...this.props}>
+                    <option disabled selected>Selecione uma opção</option>
+                    {this.props.options.map(item => 
+                        <option value={item}>{item}</option>)}
                 </select>
             </div>
         );
