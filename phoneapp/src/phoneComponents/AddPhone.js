@@ -40,7 +40,7 @@ export default class AddPhone extends React.Component{
 
             const defaultOptions = {
                 headers: {
-                    cpf: "04925787454"
+                    cpf: "03819277331"
                 },
             };
 
@@ -142,7 +142,7 @@ export default class AddPhone extends React.Component{
                                 <Input id="marca" name="brand" label="Marca" type="text" value={this.state.product.brand} onChange={this.updateValues}></Input>
                             </Col>
                             <Col s="12" l="6">
-                                <Select name="color" options={this.state.colors} value={this.state.product.color} onChange={this.updateValues}></Select>
+                                <Select name="color" label="Cor" options={this.state.colors} value={this.state.product.color} onChange={this.updateValues}></Select>
                             </Col>
                             <Col s="12" l="6">
                                 <Input pattern="^-?[0-9]\d*\.?\d*$" id="preco" name="price" label="Preço" type="number" value={this.state.product.price} onChange={this.updateValues}></Input>

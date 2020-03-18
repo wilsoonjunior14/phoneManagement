@@ -21,7 +21,7 @@ export default class Select extends React.Component{
 
         return (
             <div>
-                <label style={style.label} for="select">Select</label>
+                <label style={style.label} for="select">{this.props.label}</label>
                 <select style={style.select} className="browser-default" id="select" {...this.props}>
                     <option disabled selected>Selecione uma opção</option>
                     {this.props.options.map(item => 
