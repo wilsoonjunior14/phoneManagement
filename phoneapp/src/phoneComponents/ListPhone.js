@@ -2,14 +2,25 @@ import React, {Component} from "react";
 
 import {Container, Row, Col, Table, Button, Icon} from "react-materialize";
 
+import axios from "axios";
+
 export default class ListPhone extends React.Component{
 
     constructor(props){
         super(props);
+        this.state = {products: []};
+    }
+
+    componentDidMount(){
+        this.getProdutos();
     }
 
     getProdutos(){
-
+        axios.get("https://phones--melhorcom.repl.co/phone")
+        .then((response) => {
+            var products = response.data;
+            this.setState({products: products});
+        });
     }
 
     render(){
@@ -54,16 +65,18 @@ export default class ListPhone extends React.Component{
                                     <th>Preço</th>
                                     <th>Marca</th>
                                     <th>Cor</th>
-                                    <th colspan="2"></th>
+                                    <th colSpan="2"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style={style.borderTable}>
-                                    <td>12093</td>
-                                    <td>12093</td>
-                                    <td>12093</td>
-                                    <td>12093</td>
-                                    <td>12093</td>
+
+                                {this.state.products.map(product => 
+                                    <tr style={style.borderTable}>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td>
                                         <Icon>edit</Icon>
                                     </td>
@@ -71,6 +84,9 @@ export default class ListPhone extends React.Component{
                                         <Icon>delete</Icon>
                                     </td>
                                 </tr>
+                                )}
+
+                                
                             </tbody>
                         </Table>
                     </Col>
