@@ -16,12 +16,22 @@ export default class AddPhone extends React.Component{
         this.state = {
             redirect: false,
             colors: ['BLACK', 'WHITE', 'GOLD', 'PINK'],
-            product: {}
+            product: {},
+            defaultOptions:{
+                headers: {
+                    cpf: "03819277331"
+                },
+            },
+            _id: this.props.match.params.id
         };
+
+        if (this.state._id != undefined) this.getProduct();
 
         this.updateValues    = this.updateValues.bind(this);
         this.submitProduct   = this.submitProduct.bind(this);
         this.validateProduct = this.validateProduct.bind(this);
+        this.getProduct      = this.getProduct.bind(this);
+        this.updateProduct   = this.updateProduct.bind(this);
     }
 
     updateValues(evt){
@@ -39,26 +49,46 @@ export default class AddPhone extends React.Component{
             oldState.product.code = "#"+parseInt(10000+(Math.random()*1000));
             this.setState(oldState);
 
-            const defaultOptions = {
-                headers: {
-                    cpf: "03819277331"
-                },
-            };
-
-            axios.post("https://phones--melhorcom.repl.co/phone", this.state.product, defaultOptions)
-            .then(res => {
-                let oldState     = this.state;
-                oldState.product = {};
-                oldState.redirect= true;
-                this.setState({oldState});
-
-                let data = res.data;
-                toast.info(data.business);
-            });
+            if (this.state._id == undefined){
+                this.saveProduct();
+            }else{
+                this.updateProduct();
+            }
 
         }else{
             toast.error(validation.message);
         }
+    }
+
+    getProduct(){
+        axios.get("https://phones--melhorcom.repl.co/phone/"+this.state._id, this.state.defaultOptions)
+        .then(res => {
+            let oldState = this.state;
+            oldState.product = res.data;
+            this.setState(oldState);
+            console.log(this.state);
+        });
+    }
+
+    saveProduct(){
+
+        axios.post("https://phones--melhorcom.repl.co/phone", this.state.product, this.state.defaultOptions)
+        .then(res => {
+            let oldState     = this.state;
+            oldState.product = {};
+            oldState.redirect= true;
+            this.setState({oldState});
+
+            let data = res.data;
+            toast.info(data.business);
+        });
+    }
+
+    updateProduct(){
+        axios.patch("https://phones--melhorcom.repl.co/phone/"+this.state._id, this.state.product, this.state.defaultOptions)
+        .then(res => {
+            console.log(res.data);
+        });
     }
 
     validateProduct(){
@@ -152,6 +182,9 @@ export default class AddPhone extends React.Component{
             container:{
                 width: "40%"
             },
+            button:{
+                width: "100%"
+            }
         }
 
         return(
@@ -184,10 +217,10 @@ export default class AddPhone extends React.Component{
                                 
                             </Col>
                             <Col s="12" l="3">
-                                <a className="btn waves-effect waves-light grey lighten-2 black-text right" href="/">Voltar</a>
+                                <a style={style.button} className="btn waves-effect waves-light grey lighten-2 black-text right" href="/">Voltar</a>
                             </Col>
                             <Col s="12" l="3">
-                                <Button onClick={this.submitProduct} className="btn grey lighten-2 black-text right">Salvar</Button>
+                                <Button style={style.button} onClick={this.submitProduct} className="btn grey lighten-2 black-text right">Salvar</Button>
                             </Col>
                         </Row>
                     </Col>

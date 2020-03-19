@@ -1,14 +1,21 @@
 import React, {Component} from "react";
 
 import {Container, Row, Col, Table, Button, Icon} from "react-materialize";
-
+import {toast} from "react-toastify";
 import axios from "axios";
 
 export default class ListPhone extends React.Component{
 
     constructor(props){
         super(props);
-        this.state = {products: []};
+        this.state = {products: [],
+            defaultOptions: {
+                headers:{
+                    cpf: "03819277331"
+                }
+            }};
+
+        this.deleteProduct = this.deleteProduct.bind(this);
     }
 
     componentDidMount(){
@@ -16,10 +23,23 @@ export default class ListPhone extends React.Component{
     }
 
     getProdutos(){
-        axios.get("https://phones--melhorcom.repl.co/phone")
+
+        axios.get("https://phones--melhorcom.repl.co/phone",this.state.defaultOptions)
         .then((response) => {
-            var products = response.data;
-            this.setState({products: products});
+            let oldState = this.state;
+            oldState.products = response.data;
+            this.setState(oldState);
+        });
+    }
+
+    deleteProduct(product){
+
+        axios.delete("https://phones--melhorcom.repl.co/phone/"+product._id, this.state.defaultOptions)
+        .then((response) => {
+            let message = response.data;
+            toast.info(message);
+
+            this.getProdutos();
         });
     }
 
@@ -72,17 +92,21 @@ export default class ListPhone extends React.Component{
 
                                 {this.state.products.map(product => 
                                     <tr style={style.borderTable}>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <Icon>edit</Icon>
-                                    </td>
-                                    <td>
-                                        <Icon>delete</Icon>
-                                    </td>
+                                        <td>{product.code[0]}</td>
+                                        <td>{product.model}</td>
+                                        <td>R$ {product.price}</td>
+                                        <td>{product.brand}</td>
+                                        <td>{product.color}</td>
+                                        <td>
+                                            <a href={"/edit/"+product._id}>
+                                                <Icon left className="black-text">edit</Icon>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a onClick={() => this.deleteProduct(product)}>
+                                                <Icon left className="black-text">delete</Icon>
+                                            </a>
+                                        </td>
                                 </tr>
                                 )}
 

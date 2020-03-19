@@ -47,6 +47,9 @@ export default class HeaderApp extends React.Component{
                         <Route path="/add">
                             <AddPhone />
                         </Route>
+                        <Route path="/edit/:id" component={AddPhone}>
+                        
+                        </Route>
                     </Switch>
 
                 </div>

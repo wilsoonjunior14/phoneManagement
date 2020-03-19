@@ -19,7 +19,6 @@ export default class FooterApp extends React.Component{
 
         return (
             <Footer
-            style={style.Footer}
             className="blue"
             copyrights="2020 - Todos os direitos reservados">
 

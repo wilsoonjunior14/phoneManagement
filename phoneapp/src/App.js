@@ -18,7 +18,7 @@ function App() {
   return (
     <div>
       <HeaderApp></HeaderApp>
-      <FooterApp></FooterApp>
+      
       <ToastContainer autoClose={4000} />
     </div>
   );
