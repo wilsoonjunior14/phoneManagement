@@ -22,7 +22,7 @@ export default class AddPhone extends React.Component{
                     cpf: "03819277331"
                 },
             },
-            _id: this.props.match.params.id
+            _id: this.props.match != undefined ? this.props.match.params.id : undefined
         };
 
         if (this.state._id != undefined) this.getProduct();
@@ -32,6 +32,7 @@ export default class AddPhone extends React.Component{
         this.validateProduct = this.validateProduct.bind(this);
         this.getProduct      = this.getProduct.bind(this);
         this.updateProduct   = this.updateProduct.bind(this);
+        this.formatDate      = this.formatDate.bind(this);
     }
 
     updateValues(evt){
@@ -60,11 +61,20 @@ export default class AddPhone extends React.Component{
         }
     }
 
+    formatDate(date){
+        let data = date.substring(0, 10);
+        data     = data.split("-");
+        return data[2]+"/"+data[1]+"/"+data[0];
+    }
+
     getProduct(){
         axios.get("https://phones--melhorcom.repl.co/phone/"+this.state._id, this.state.defaultOptions)
         .then(res => {
-            let oldState = this.state;
-            oldState.product = res.data;
+            let oldState             = this.state;
+            oldState.product         = res.data;
+            oldState.product.date    = this.formatDate(oldState.product.date);
+            oldState.product.endDate = this.formatDate(oldState.product.endDate); 
+
             this.setState(oldState);
             console.log(this.state);
         });
@@ -87,7 +97,8 @@ export default class AddPhone extends React.Component{
     updateProduct(){
         axios.patch("https://phones--melhorcom.repl.co/phone/"+this.state._id, this.state.product, this.state.defaultOptions)
         .then(res => {
-            console.log(res.data);
+            toast.info(res.data);
+            this.getProduct();
         });
     }
 

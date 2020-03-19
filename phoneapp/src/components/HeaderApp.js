@@ -20,7 +20,7 @@ export default class HeaderApp extends React.Component{
 
                 <div>
                     <Navbar
-                    className="blue"
+                    className="blue darken-4"
                     alignLinks="left"
                     brand={<a href="#"><Icon className="right">smartphone</Icon>M</a>}
                     menuIcon={<Icon></Icon>}

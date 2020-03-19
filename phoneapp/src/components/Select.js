@@ -15,7 +15,8 @@ export default class Select extends React.Component{
             },
             select: {
                 height: "35px",
-                border: "1px solid black"
+                border: "1px solid black",
+                borderRadius: "6px"
             }
         }
 
