@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import {Container, Row, Col, Table, Button, Icon} from "react-materialize";
 import {toast} from "react-toastify";
 import axios from "axios";
+import CurrencyFormat from "react-currency-format";
 
 export default class ListPhone extends React.Component{
 
@@ -94,7 +95,9 @@ export default class ListPhone extends React.Component{
                                     <tr style={style.borderTable}>
                                         <td>{product.code[0]}</td>
                                         <td>{product.model}</td>
-                                        <td>R$ {product.price}</td>
+                                        <td>
+                                            <CurrencyFormat decimalSeparator={','} thousandSeparator={'.'} prefix={'R$'} displayType={'text'} value={product.price}></CurrencyFormat>    
+                                        </td>
                                         <td>{product.brand}</td>
                                         <td>{product.color}</td>
                                         <td>

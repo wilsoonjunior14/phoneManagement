@@ -9,6 +9,7 @@
     "axios": "^0.19.2",
     "materialize-css": "^1.0.0-rc.2",
     "react": "^16.13.0",
+    "react-currency-format": "^1.0.0",
     "react-dom": "^16.13.0",
     "react-input-mask": "^2.0.4",
     "react-materialize": "^3.5.9",

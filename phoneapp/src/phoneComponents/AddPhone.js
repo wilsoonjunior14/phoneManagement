@@ -47,7 +47,8 @@ export default class AddPhone extends React.Component{
         if (validation.status){
 
             let oldState = this.state;
-            oldState.product.code = "#"+parseInt(10000+(Math.random()*1000));
+            oldState.product.code  = "#"+parseInt(10000+(Math.random()*1000));
+            oldState.product.price = oldState.product.price.replace(".", "").replace(",",".");
             this.setState(oldState);
 
             if (this.state._id == undefined){
@@ -214,7 +215,7 @@ export default class AddPhone extends React.Component{
                                 <Select name="color" label="Cor" options={this.state.colors} value={this.state.product.color} onChange={this.updateValues}></Select>
                             </Col>
                             <Col s="12" l="6">
-                                <Input pattern="^-?[0-9]\d*\.?\d*$" id="preco" name="price" label="Preço" type="number" value={this.state.product.price} onChange={this.updateValues}></Input>
+                                <PriceField id="preco" name="price" label="Preço" value={this.state.product.price} onChange={this.updateValues}></PriceField>
                             </Col>
                             <Col s="12" l="6">
                                 <DateField id="inicio" name="date" label="Inicio das Vendas" type="text" value={this.state.product.date} onChange={this.updateValues}></DateField>
